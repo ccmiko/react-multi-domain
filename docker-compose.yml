@@ -1,0 +1,21 @@
+version: '3'
+services:
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - 8080:80
+    volumes:
+      - ./build:/var/www  #buildしたファイルをdockerのnginx内に反映
+      - ./nginx/:/etc/nginx/conf.d/ #ローカルの設定ファイルをnginxに反映
+  dnsmasq:
+    image: andyshinn/dnsmasq
+    container_name: dnsmasq
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    volumes:
+      - ./dnsmasq/hosts:/etc/hosts-dnsmasq #ホスト設定をDNSに反映
+      - ./dnsmasq/dnsmasq.conf:/etc/dnsmasq.conf #同上
+    cap_add:
+      - NET_ADMIN
